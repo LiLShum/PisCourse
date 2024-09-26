@@ -1,0 +1,87 @@
+@font-face {
+    font-family: 'Molodo';
+    src: url("../../public/ofont.ru_Molodost.ttf");
+}
+
+.wrapper {
+    width: 100vw;
+}
+
+#secondaryText, #mainText {
+    letter-spacing: 2px;
+    font-family: Molodo, serif;
+    color: white;
+    font-size: 46px;
+}
+
+.slider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100vw;
+    background: no-repeat center/100%;
+    position: absolute;
+    height: 100vh;
+    top: 0;
+    left: 0;
+}
+
+#slider1 {
+    animation: Slides1 9s ease-in-out 0s infinite;
+}
+
+#slider2 {
+    animation: Slides2 9s ease-in-out 3s infinite;
+}
+
+#slider3 {
+    animation: Slides3 9s ease-in-out 6s infinite;
+}
+@keyframes Slides1 {
+    0% {
+        left: 0;
+    }
+    33% {
+        left: 0;
+    }
+    50% {
+        left: -100vw;
+    }
+    90% {
+        left: -100vw;
+    }
+    100% {
+        left: 0;
+    }
+}
+
+@keyframes Slides2 {
+    0% {
+        left: 0;
+    }
+    33% {
+        left: 0;
+    }
+    50% {
+        left: -100vw;
+    }
+    100% {
+        left: -100vw;
+    }
+}
+
+@keyframes Slides3 {
+    0% {
+        left: 0;
+    }
+    66% {
+        left: 0;
+    }
+    83% {
+        left: 0;
+    }
+    100% {
+        left: -100vw;
+    }
+}
