@@ -4,6 +4,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   max-width: 100%;
   position: relative;
+  padding-top: 150px;
 }
 
 *{
@@ -11,3 +12,4 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
+

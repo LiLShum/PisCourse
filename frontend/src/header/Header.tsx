@@ -1,4 +1,4 @@
-import './Header.css'
+import styles from './'
 import {useEffect} from "react";
 const handleScroll = () => {
     const header = document.getElementById('Header');
@@ -18,7 +18,7 @@ export default function Header() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
     return (
-        <header id={'Header'}>
+        <header id={styles.header}>
             <div className={'logoWrapper'}>
                 <div className={'logo'}></div>
             </div>
@@ -28,7 +28,7 @@ export default function Header() {
                 <a>БАННОЕ МЕНЮ</a>
                 <a>ОТЗЫВЫ</a>
                 <a>КОНТАКТЫ</a>
-                <a>АВТОРИЗИРОВАТЬСЯ</a>
+                <a href='/auth'>АВТОРИЗИРОВАТЬСЯ</a>
             </div>
             <div className={'searchWrapper'}>
                 <input type={'search'} placeholder={'Найти...'}  className={'searchInput'}/>

@@ -9,27 +9,22 @@
     height: 150px;
 }
 
-header {
-    z-index: 10000;
-    width: 100%;
-    position: fixed;
+.header {
+    top: 0;
+    z-index: 10;
+    width: 100vw;
     height: 150px;
     align-items: center;
     display: flex;
     justify-content: space-between;
     padding: 0 50px;
+    position: fixed;
 }
 
 .headerWrapper {
     display: flex;
 }
 
-.logoWrapper {
-}
-
-.searchWrapper {
-
-}
 
 .searchInput {
     font-family: Molodo, serif;
@@ -47,6 +42,7 @@ a {
     padding: 0 10px;
     margin: 0 5px;
     cursor: pointer;
+    text-decoration: none;
 }
 
 a:hover {
@@ -54,3 +50,6 @@ a:hover {
     text-decoration: underline;
 }
 
+a:visited {
+    color: black;
+}
