@@ -1,5 +1,5 @@
 import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {User} from "./user.entity";
+import User from "./user.entity";
 import Sauna from "./sauna.entity";
 
 @Entity()
@@ -9,14 +9,17 @@ export default class Booking {
     bookingId: number;
 
     @Column()
-    dateStart: Date;
+    date: Date;
 
     @Column()
-    dateEnd: Date;
+    startTime: Date;
 
-    @ManyToOne(() => User, user => user.bookings)
+    @Column()
+    endTime: Date;
+
+    @ManyToOne(() => User, user => user.bookings, { onDelete: 'CASCADE', cascade: true, })
     user: User;
 
-    @ManyToOne(() => Sauna, sauna => sauna.bookings)
+    @ManyToOne(() => Sauna, sauna => sauna.bookings, { onDelete: 'CASCADE', cascade: true, })
     sauna: Sauna;
 }

@@ -1,9 +1,12 @@
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn} from "typeorm";
-import {User} from "./user.entity";
+import User from "./user.entity";
 import Mark from "./marks.entity";
 import Comments from "./comments.entity";
 import Booking from "./booking.entity";
 import Addresses from "./addresses.entity";
+import SwimmingPoolEntity from "./SwimmingPool.entity";
+import * as buffer from "buffer";
+import ImageEntity from "./image.entity";
 
 @Entity()
 export default class Sauna {
@@ -14,30 +17,33 @@ export default class Sauna {
     name: string;
 
     @Column()
-    hasSwimmingPool: boolean;
+    billiard: number;
 
     @Column()
-    hasBilliard: boolean;
+    price: number;
 
     @Column()
-    description: string
+    description: string;
 
-    @Column()
-    address: string;
+    @OneToOne(() => Addresses,(address) => address.sauna, { onDelete: 'CASCADE' })
+    @JoinColumn()
+    address: Addresses;
 
-    @ManyToOne(()=> User, (user) => user.saunas)
-    user: User
+    @ManyToOne(()=> User, (user) => user.saunas,)
+    user: User;
 
-    @OneToMany(() => Mark, mark => mark.sauna)
-    marks: Mark[]
+    @OneToMany(() => Mark, mark => mark.sauna, { onDelete: 'CASCADE' })
+    marks: Mark[];
 
-    @OneToMany(() => Comments, comment => comment.sauna)
+    @OneToMany(() => Comments, comment => comment.sauna, { onDelete: 'CASCADE' })
     comments: Comments[];
 
-    @OneToMany(() => Booking, booking => booking.sauna)
+    @OneToMany(() => Booking, booking => booking.sauna, { onDelete: 'CASCADE' })
     bookings: Booking[];
 
-    @OneToOne(() => Addresses)
-    @JoinColumn()
-    Address: Addresses;
+    @OneToMany(() => SwimmingPoolEntity, (swimmingPoll) => swimmingPoll.sauna, { onDelete: 'CASCADE', cascade: true, })
+    swimmingPools?: SwimmingPoolEntity[];
+
+    @OneToMany(() => ImageEntity, image => image.sauna, { onDelete: 'CASCADE'})
+    images: ImageEntity[];
 }

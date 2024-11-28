@@ -1,45 +1,63 @@
-import {Injectable, Res, UnauthorizedException} from '@nestjs/common';
+import {Injectable, Req, Res, UnauthorizedException} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {UserService} from "../user/user.service";
 import AuthDto from "./dto/auth.dto";
 import { sha256 } from 'js-sha256';
-import {User} from "../entities/user.entity";
+import User from "../entities/user.entity";
 import { jwtConstants } from "./auth.constants"
 import CreateUserDTO from "../user/createUser.dto";
+import {TokenService} from "../token/token.service";
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly jwtService: JwtService,
         private readonly userService: UserService,
+        private readonly tokenService: TokenService,
     ) {}
 
     async signIn(authData : AuthDto, @Res() res) {
+        console.log("authdate: ");
+        console.log(authData);
         const user: User = await this.userService.getUserByLogin(authData.login);
-
+        console.log("user: " + user);
         const inputPassword = sha256(authData.password);
-
+        console.log(inputPassword);
+        console.log(user.password)
         if(user.password !== inputPassword) {
             throw new UnauthorizedException();
         }
+        const payload = { userId: user.userId, login: user.login, role: user.role };
+        const tokens =  this.tokenService.generateTokens(payload);
+        await this.tokenService.saveToken(user.userId, tokens.refreshToken);
 
-        const access_token = await this.jwtService.signAsync(user.userId.toString(), {secret: jwtConstants.secret});
+        res.cookie('refreshToken', tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true});
 
-        res.set('authorization', access_token);
-
-        return access_token;
+        return {...tokens, user: user};
     }
 
     async register(createUserDto : CreateUserDTO, @Res() res) {
-
-        createUserDto.password =  sha256(createUserDto.password)
-
+        console.log("pass before hash: " + createUserDto.password)
+        createUserDto.password =  sha256(String(createUserDto.password));
+        console.log("pass after hash: " + createUserDto.password)
         const createdUser =  await this.userService.createUser(createUserDto);
+        const payload = { userId: createdUser.userId, login: createdUser.login, role: createdUser.role };
+        const tokens =  this.tokenService.generateTokens(payload);
+        await this.tokenService.saveToken(createdUser.userId, tokens.refreshToken);
 
-        const token =  this.jwtService.signAsync(createdUser.userId.toString() , {secret: jwtConstants.secret});
+        res.cookie('refreshToken', tokens.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true});
 
-        res.set('authorization', token);
+        return {...tokens, user: createdUser};
+    }
 
+   async refresh(@Req() req) {
+        const {refreshToken} = req.cookies;
+        return await this.userService.refresh(refreshToken);
+   }
+
+    async  logout(@Req() req, @Res() res) {
+        const token = await this.tokenService.deleteToken(req.cookies['refreshToken']);
+        res.clearCookie('refreshToken');
         return token;
     }
 }

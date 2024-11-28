@@ -1,5 +1,5 @@
-import {Column, Entity, OneToOne, PrimaryGeneratedColumn} from "typeorm";
-import {User} from "./user.entity";
+import {Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn} from "typeorm";
+import Sauna from "./sauna.entity";
 
 @Entity()
 export default class Addresses {
@@ -17,5 +17,9 @@ export default class Addresses {
 
     @Column()
     houseNumber: string;
+
+    @OneToOne(()=> Sauna, (sauna) => sauna.address,{ onDelete: 'CASCADE', cascade: true } )
+    @JoinColumn()
+    sauna: Sauna;
 
 }

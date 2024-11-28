@@ -6,7 +6,7 @@ import Booking from "./booking.entity";
 import Addresses from "./addresses.entity";
 
 @Entity()
-export class User {
+export default class User {
     @PrimaryGeneratedColumn()
     userId: number;
 
@@ -40,8 +40,6 @@ export class User {
     @OneToMany(() => Comments, comment => comment.user)
     comments: Comments[];
 
-    @OneToMany(() => Booking, booking => booking.user)
+    @OneToMany(() => Booking, booking => booking.user, { onDelete: 'CASCADE'})
     bookings: Booking[];
-
-
 }

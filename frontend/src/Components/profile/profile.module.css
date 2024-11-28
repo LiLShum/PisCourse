@@ -1,0 +1,91 @@
+@font-face {
+    font-family: 'Molodo';
+    src: url("../../../public/ofont.ru_Molodost.ttf");
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    vertical-align: center;
+    align-items: center;
+    margin-top: 14%;
+    text-align: center;
+    flex-direction: column;
+}
+
+.userInfoBlock {
+
+}
+
+h1 {
+    padding-bottom: 20px;
+    letter-spacing: 2px;
+    font-size: 42px;
+}
+
+.userInfoInputs {
+    width: 1000px;
+    border: 1px solid black;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+}
+
+.userInfoInput {
+    margin: 20px;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+
+}
+
+.userInfoInput::placeholder {
+    color: black;
+    font-size: 24px;
+}
+
+.editButton {
+    font-family: Molodo, serif;
+    letter-spacing: 2px;
+    color: black;
+    font-size: 20px;
+    border-radius: 0;
+    border-top: 1px solid black;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    padding: 5px;
+}
+
+.adminPanel {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+span {
+    color: black;
+}
+
+.buttonGroup {
+    margin-top: 25%;
+}
+.searchInput {
+    font-family: Molodo, serif;
+    font-size: 20px;
+    border-radius: 10px;
+    padding: 10px 20px;
+    width: 270px;
+}
+
+h1 {
+    font-family: Molodo, serif;
+}
+
+.userSaunas {
+    display: flex;
+    flex-wrap: wrap;
+}

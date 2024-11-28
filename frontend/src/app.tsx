@@ -1,13 +1,26 @@
-import Header from "./header/Header";
-import BathhouseMain from "./bathhouse-mane/bathhouse";
-import React from "react";
+import Header from "./Components/header/Header";
+import BathhouseMain from "./Components/bathhouse-mane/bathhouse";
+import React, {FC, useContext, useEffect} from "react";
+import {Context} from "./index";
+import {observable} from "mobx";
+import {observer} from "mobx-react-lite";
 
-export default function App() {
+
+const App : FC = () => {
+
+    const {store} = useContext(Context);
+    useEffect(() => {
+        if(localStorage.getItem('token')) {
+            store.checkAuth();
+        }
+    }, []);
 
     return(
         <>
-            <Header/>
+            <Header isAuth={store.isAuth}/>
             <BathhouseMain/>
         </>
     )
 }
+
+export default observer(App);

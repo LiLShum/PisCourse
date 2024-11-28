@@ -6,7 +6,10 @@
       "dom.iterable",
       "esnext"
     ],
+    "strictPropertyInitialization": false,
     "allowJs": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -22,5 +25,19 @@
   },
   "include": [
     "src"
-  ]
+  ],
+  "paths": {
+    "crypto": [
+      "./node_modules/crypto-browserify"
+    ],
+    "stream": [
+      "./node_modules/stream-browserify"
+    ],
+    "util": [
+      "./node_modules/util"
+    ],
+    "process": [
+      "./node_modules/process/browser"
+    ]
+  }
 }

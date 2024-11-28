@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Molodo';
+    src: url("../../../../public/ofont.ru_Molodost.ttf");
+}
+
+
+.RadioGroup {
+    font-family: Molodo, serif;
+}

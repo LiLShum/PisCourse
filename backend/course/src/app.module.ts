@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import {User} from "./entities/user.entity";
+import User from "./entities/user.entity";
 import { UserController } from './user/user.controller';
 import {UserService} from "./user/user.service";
 import UserModule from "./user/user.module";
@@ -13,6 +13,16 @@ import Mark from "./entities/marks.entity";
 import Comments from "./entities/comments.entity";
 import Addresses from "./entities/addresses.entity";
 import Booking from "./entities/booking.entity";
+import TokenEntity from "./entities/token.entity";
+import ImageEntity from './entities/image.entity'
+import {TokenService} from "./token/token.service";
+import {TokenModule} from "./token/token.module";
+import SwimmingPoolEntity from "./entities/SwimmingPool.entity";
+import SaunaModule from "./saunas/sauna.module";
+import SaunaController from "./saunas/sauna.controller";
+import SaunaService from "./saunas/sauna.service";
+import BookingModule from "./Booking/Booking.module";
+import CommentModule from "./comments/comment.module";
 
 @Module({
   imports: [
@@ -23,17 +33,21 @@ import Booking from "./entities/booking.entity";
         username: 'postgres',
         password: 'LOL123321lol',
         database: 'postgres',
-        entities: [User, Sauna, Mark, Comments, Addresses, Booking],
+        entities: [User, Sauna, Mark, Comments, Addresses, Booking, TokenEntity, SwimmingPoolEntity, ImageEntity],
         synchronize: true,
       }),
       TypeOrmModule.forFeature([
-          User, Sauna, Mark, Comments, Addresses, Booking
+          User, Sauna, Mark, Comments, Addresses, Booking, TokenEntity, SwimmingPoolEntity, ImageEntity
       ]),
       UserModule,
       AuthModule,
       JwtModule,
+      TokenModule,
+      SaunaModule,
+      BookingModule,
+      CommentModule
   ],
-  controllers: [UserController, AuthController],
-  providers: [UserService, AuthService],
+  controllers: [UserController, AuthController, SaunaController],
+  providers: [UserService, AuthService, SaunaService],
 })
 export class AppModule {}
