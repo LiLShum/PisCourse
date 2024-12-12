@@ -5,7 +5,6 @@ import Comments from "./comments.entity";
 import Booking from "./booking.entity";
 import Addresses from "./addresses.entity";
 import SwimmingPoolEntity from "./SwimmingPool.entity";
-import * as buffer from "buffer";
 import ImageEntity from "./image.entity";
 
 @Entity()
@@ -25,7 +24,7 @@ export default class Sauna {
     @Column()
     description: string;
 
-    @OneToOne(() => Addresses,(address) => address.sauna, { onDelete: 'CASCADE' })
+    @OneToOne(() => Addresses,(address) => address.sauna, { onDelete: 'CASCADE', cascade: true, eager: true })
     @JoinColumn()
     address: Addresses;
 

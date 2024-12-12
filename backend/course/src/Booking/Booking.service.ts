@@ -47,6 +47,9 @@ export default class BookingService {
                 user: {
                     userId: userId
                 }
+            },
+            relations: {
+                sauna: true
             }
         });
     }

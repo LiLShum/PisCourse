@@ -31,8 +31,9 @@ export class UserController {
 
     @Put()
     editUserInfo(@Body() editUserDto: EditUserDto, @Req() req) {
-        console.log(editUserDto);
-        return this.userService.editUserInfo(editUserDto, req.headers['authorization']);
+        const token = req.headers['authorization'].split(' ')[1];
+        console.log(token);
+        return this.userService.editUserInfo(editUserDto, token);
     }
 
     @Post('/grantRoleToUser')

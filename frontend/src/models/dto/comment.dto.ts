@@ -5,3 +5,9 @@ export default interface CommentDto {
 
     comment: string;
 }
+
+export interface FetchCommentsDto {
+    comments: CommentDto[],
+
+    length: number;
+}

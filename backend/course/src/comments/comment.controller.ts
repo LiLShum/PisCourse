@@ -12,9 +12,9 @@ export default class CommentController {
         return this.commentService.addComment(commentDto);
     }
 
-    @Get('/:saunaId')
-    async fetchComments(@Param('saunaId') saunaId: string) {
-        return this.commentService.fetchComments(+saunaId);
+    @Get('/:saunaId/:limit/:offset')
+    async fetchComments(@Param('saunaId') saunaId: string, @Param('limit') limit: number, @Param('offset') offset: number) {
+        return this.commentService.fetchComments(+saunaId, limit, offset);
     }
 
     @Delete('/:saunaId')

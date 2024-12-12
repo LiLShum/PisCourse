@@ -1,4 +1,4 @@
-import React, {FC, useContext, useState} from "react";
+import React, {FC, useContext, useEffect, useState} from "react";
 import {
     Button,
     Card,
@@ -19,8 +19,7 @@ import saunaCard from "../../saunaCards/saunaCard/saunaCard";
 const UserSaunaCard: FC<userSaunaCardProps> = (userSaunaCardProps: userSaunaCardProps) => {
     const [selectedOption, setSelectedOption] = useState<keyof typeof labelsMap | ''>('');
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
-
-
+    const saunaImages = [...userSaunaCardProps.images];
     const { store } = useContext(Context);
 
     const labelsMap = {
@@ -28,18 +27,17 @@ const UserSaunaCard: FC<userSaunaCardProps> = (userSaunaCardProps: userSaunaCard
         update: "Обновить",
     };
 
-    console.log(userSaunaCardProps);
-
+    console.log(saunaImages);
     return (
         <div className="max-w-[900px] gap-2 grid grid-cols-12 grid-rows-2 px-8" style={{width: "800px"}}>
             <Card isFooterBlurred className="w-full h-[300px] col-span-12 sm:col-span-7">
-                <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                    <h4 className="text-white/90 font-medium text-xl" style={{color: "black", zIndex: 0}}>
+                <CardHeader className="absolute z-10  flex-col items-start" style={{backgroundColor: 'rgba(0, 0, 0, 0.3)'}}>
+                    <h4 className="text-white/90 font-medium text-xl" style={{color: "white", zIndex: 0}}>
                         {userSaunaCardProps.name}
                     </h4>
                 </CardHeader>
                 <img
-                    src={`/${userSaunaCardProps.images[0].url}`}
+                    src={`/${saunaImages[0].url}`}
                     alt='sauna image'
                 />
                 <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">

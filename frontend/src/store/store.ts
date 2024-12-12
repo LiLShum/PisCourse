@@ -17,7 +17,7 @@ import BookingDto, {ClientBookingDto} from "../models/dto/booking.dto";
 import BookingService from "../services/BookingService";
 import CommentService from "../services/CommentService";
 import AddCommentDto from "../models/dto/add-comment.dto";
-import CommentDto from "../models/dto/comment.dto";
+import CommentDto, {FetchCommentsDto} from "../models/dto/comment.dto";
 export default class Store {
     user = {} as IUser;
     isAuth = false;
@@ -42,14 +42,12 @@ export default class Store {
     setUser(user: IUser) {
         this.user = user;
     }
-
     async login(login: string, password: string) {
         try {
             const response = await AuthService.login    (login, password);
             localStorage.setItem('token', response.data.accessToken);
             this.setAuth(true);
             this.setUser(response.data.user);
-            window.location.replace('/');
         }
         catch (e : any) {
             console.log(e.response?.data?.message);
@@ -63,7 +61,6 @@ export default class Store {
             localStorage.setItem('token', response.data.accessToken);
             this.setAuth(true);
             this.setUser(response.data.user);
-            window.location.replace('/');
         }
         catch (e : any) {
             console.log(e.response?.data?.message);
@@ -150,8 +147,8 @@ export default class Store {
         return BookingService.getBookings();
     }
 
-    async fetchComments(saunaId: string) : Promise<AxiosResponse<CommentDto[]>> {
-        return CommentService.fetchComments(saunaId);
+    async fetchComments(saunaId: string, limit: number, offset: number) : Promise<AxiosResponse<FetchCommentsDto>> {
+        return CommentService.fetchComments(saunaId, limit, offset);
     }
 
     async addComment(commentDto: AddCommentDto) {
@@ -160,5 +157,13 @@ export default class Store {
 
     async deleteComment(saunaId: number) {
         return CommentService.deleteComment(saunaId);
+    }
+
+    async getUserBookings(userId: string) {
+        return BookingService.getUserBookings(userId);
+    }
+
+    async deleteBooking(bookingId: string) {
+        return BookingService.deleteBooking(bookingId);
     }
 }

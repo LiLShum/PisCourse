@@ -15,6 +15,7 @@ import Store from "./store/store";
 import ProfileBlock from "./profile";
 import ProtectedRoute from './ProtectedRoute'
 import SaunaDescription from "./Components/sauna-description/SaunaDescription";
+import Bookings from "./Bookings";
 
 
 interface State {
@@ -58,6 +59,12 @@ const router = createBrowserRouter ([
         element: (
             <SaunaDescription/>
         )
+    },
+    {
+        path: '/bookings',
+        element: (
+            <Bookings/>
+        )
     }
 ]);
 
@@ -66,11 +73,11 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-    <NextUIProvider>
-        <Context.Provider value={{
-            store
-                }}>
-            <RouterProvider router={router} />
-        </Context.Provider>
-    </NextUIProvider>
+        <NextUIProvider>
+            <Context.Provider value={{
+                store
+            }}>
+                <RouterProvider router={router} />
+            </Context.Provider>
+        </NextUIProvider>
 );

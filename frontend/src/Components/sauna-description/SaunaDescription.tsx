@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import Booking from "./booking/Booking";
 import Comments from "./comments/comments";
 import * as maptilersdk from '@maptiler/sdk';
-import Map from "../bathhouse-mane/map/Map";
+import MyMap from "../bathhouse-mane/map/Map";
 
 const SaunaDescription: FC = () => {
     const { saunaId } = useParams<{ saunaId: string }>();
@@ -121,7 +121,7 @@ const SaunaDescription: FC = () => {
                         )}
                     </div>
                     <div style={{margin: "80px"}}>
-                        <Map/>
+                        <MyMap address={`${address.city}  ${address.street} ${address.houseNumber}`}/>
                     </div>
                     <Comments />
                 </div>
@@ -129,5 +129,6 @@ const SaunaDescription: FC = () => {
         </>
     );
 };
-
 export default SaunaDescription;
+
+

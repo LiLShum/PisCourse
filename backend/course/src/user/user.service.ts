@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {Injectable, Req} from '@nestjs/common';
 import {Repository} from "typeorm";
 import User from "../entities/user.entity";
 import {InjectRepository} from "@nestjs/typeorm";
@@ -55,9 +55,9 @@ export class UserService {
         return { accessToken, user  };
     }
 
-    async editUserInfo(editUserDto: EditUserDto, accessToken: string)  {
+    async editUserInfo(editUserDto: EditUserDto,  token: string)  {
 
-        const payload : TokenPayload = this.jwtService.verify(accessToken, {secret: jwtConstants.secret});
+        const payload : TokenPayload = this.jwtService.verify(token, {secret: jwtConstants.secret});
 
         const user = await this.getUserById(payload.userId);
 

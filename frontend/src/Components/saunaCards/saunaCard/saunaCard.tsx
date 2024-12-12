@@ -5,15 +5,19 @@ import {SaunaDto} from "../../../models/sauna/add-sauna.dto";
 import SaunaDescription from "../../sauna-description/SaunaDescription";
 import saunaCards from "../saunaCards";
 import {Context} from "../../../index";
+import styles from './saunaCard.module.css'
+import {useNavigate} from "react-router-dom";
  const SaunaCard : FC<SaunaDto> = (
      {saunaId, name, price, address, images} : SaunaDto
  ) => {
      const { store } = useContext(Context);
+     const navigator = useNavigate();
+
     return (
-        <div className="max-w-[900px] gap-2 grid grid-cols-12 grid-rows-2 px-8">
+        <div className={styles.card}>
             <Card isFooterBlurred className="w-full h-[300px] col-span-12 sm:col-span-7">
-                <CardHeader className="absolute z-10 top-1 flex-col items-start">
-                    <h4 className="text-white/90 font-medium text-xl" style={{color: "black"}}>{name}</h4>
+                <CardHeader className="absolute z-10 flex-col items-start" style={{background: 'rgba(0,0,0, 0.3)'}}>
+                    <h4 className="text-white/90 font-medium text-xl" style={{color: "white"}}>{name}</h4>
                 </CardHeader>
                 <img src={images[0].url}/>
                 <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
@@ -26,7 +30,7 @@ import {Context} from "../../../index";
                     <Button radius="full" size="sm"
                             onClick={() => {
                                 store.setSaunaId(saunaId);
-                                window.location.replace(`/viewSauna/${store.saunaId}`)
+                                navigator(`/viewSauna/${store.saunaId}`)
                             }}
                     >Подробнее
                     </Button>

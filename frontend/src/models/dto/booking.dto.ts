@@ -11,6 +11,7 @@ export default interface BookingDto {
     userId: number;
 
     saunaId: number;
+
 }
 
 export interface ClientBookingDto {
@@ -20,4 +21,24 @@ export interface ClientBookingDto {
 
     endTime: Date;
 
+}
+
+export interface UserBookingsDto {
+    bookingId: number,
+    date: Date,
+    startTime: Date,
+    endTime: Date,
+    sauna: SaunaBooking;
+}
+
+interface SaunaBooking {
+    saunaId: number;
+
+    name: string;
+
+    billiard: number;
+
+    price: number;
+
+    description: string;
 }

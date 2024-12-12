@@ -1,23 +1,28 @@
 import React, { FC, useContext, useEffect, useState } from "react";
 import styles from "./comments.module.css";
-import { Textarea } from "@nextui-org/react";
+import {Pagination, Textarea} from "@nextui-org/react";
 import { Context } from "../../../index";
 import CommentDto from "../../../models/dto/comment.dto";
 import AddCommentDto from "../../../models/dto/add-comment.dto";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 const Comments: FC = () => {
     const { store } = useContext(Context);
     const { saunaId } = useParams<{ saunaId: string }>();
-
+    const commentsLimit = 3;
+    const [commentsOffset, setCommentsOffset] = useState<number>(0);
     const [comments, setComments] = useState<CommentDto[]>([]);
     const [commentInput, setCommentInput] = useState<string>("");
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [commentLength, setCommentLength] = useState<number>(0);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        store.fetchComments(saunaId as string).then((value) => {
-            setComments(value.data);
+        store.fetchComments(saunaId as string, commentsLimit, commentsOffset).then((value) => {
+            setComments(value.data.comments);
+            setCommentLength(value.data.length);
         });
-    }, [saunaId, store]);
+    }, [comments]);
 
     const addComment = () => {
         if (commentInput.trim() !== "") {
@@ -28,13 +33,18 @@ const Comments: FC = () => {
             };
             store.addComment(comment).then(() => {
                 setCommentInput("");
-                store.fetchComments(saunaId as string).then((value) => {
-                    setComments(value.data);
+                store.fetchComments(saunaId as string,commentsLimit, commentsOffset).then((value) => {
+                    setComments(value.data.comments);
                 });
             });
         }
     };
-
+    const changePage = (page: number) => {
+        setCommentsOffset((page-1) * commentsLimit);
+        store.fetchComments(saunaId as string, commentsLimit, (page-1) * commentsLimit)
+            .then((res) => setComments(res.data.comments));
+        setCurrentPage(page);
+    }
     return (
         <div>
             <div>
@@ -47,14 +57,19 @@ const Comments: FC = () => {
                     onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
                             e.preventDefault();
-                            addComment();
+                            if(store.isAuth) {
+                                addComment();
+                            }
+                            else {
+                                navigate('/auth')
+                            }
                         }
                     }}
                 />
             </div>
             <div className={styles.commentsWrapper}>
                 {comments.length !== 0 ? (
-                    comments.map((value) => (
+                        comments.map((value) => (
                         <div style={{ width: "50%" }} key={value.commentId}>
                             <div>
                                 <Textarea
@@ -71,8 +86,10 @@ const Comments: FC = () => {
                                         data-commentid={value.commentId}
                                         onClick={() => {
                                             store.deleteComment(value.commentId).then(() => {
-                                                store.fetchComments(saunaId as string).then((value) => {
-                                                    setComments(value.data);
+                                                store.fetchComments(saunaId as string, commentsLimit, commentsOffset).then((value) => {
+                                                    setComments(value.data.comments);
+                                                    setCommentLength(commentLength-1);
+                                                    changePage(1);
                                                 });
                                             });
                                         }}
@@ -87,6 +104,16 @@ const Comments: FC = () => {
                     <h4>Станьте первым кто оставит здесь комментарий</h4>
                 )}
             </div>
+           <div className={styles.pagination}>
+               {commentLength !== 0 &&
+                   <Pagination   showControls
+                                 disableCursorAnimation
+                                 total={Math.ceil(commentLength / commentsLimit)}
+                                 page={currentPage}
+                                 onChange={changePage}
+                   />
+               }
+           </div>
         </div>
     );
 };

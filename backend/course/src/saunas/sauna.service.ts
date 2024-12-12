@@ -89,7 +89,7 @@ export default class SaunaService {
                 swimmingPools: true,
                 address: true,
                 images: true,
-            }
+            },
         })
     }
 
@@ -109,7 +109,6 @@ export default class SaunaService {
     }
 
     async updateSauna(updateSaunaDto: UpdateSaunaDto, saunaId: string) {
-
         const sauna = await this.saunaRepository.findOne({
             where: { saunaId: +saunaId },
             relations: ['swimmingPools', 'address', 'images'],
@@ -118,35 +117,45 @@ export default class SaunaService {
         if (!sauna) {
             throw new Error('Сауна не найдена');
         }
+
         sauna.name = updateSaunaDto.name;
         sauna.description = updateSaunaDto.description;
         sauna.price = updateSaunaDto.price;
         sauna.billiard = updateSaunaDto.billiard;
 
-        sauna.address = {
-            ...sauna.address,
-            region: updateSaunaDto.region,
-            city: updateSaunaDto.city,
-            street: updateSaunaDto.street,
-            houseNumber: updateSaunaDto.houseNumber,
-        };
+        // Обновление адреса
+        if (sauna.address) {
+            sauna.address.region = updateSaunaDto.region;
+            sauna.address.city = updateSaunaDto.city;
+            sauna.address.street = updateSaunaDto.street;
+            sauna.address.houseNumber = updateSaunaDto.houseNumber;
+        } else {
+            sauna.address = {
+                region: updateSaunaDto.region,
+                city: updateSaunaDto.city,
+                street: updateSaunaDto.street,
+                houseNumber: updateSaunaDto.houseNumber,
+            } as Addresses;
+        }
 
-            for (const poolDto of updateSaunaDto.swimmingPools) {
-                const pool = sauna.swimmingPools.find(p => p.swimmingPoolId === poolDto.swimmingPoolId);
-                if (pool) {
-                    pool.width = poolDto.width;
-                    pool.length = poolDto.length;
-                } else {
-                    sauna.swimmingPools.push({
-                        width: poolDto.width,
-                        length: poolDto.length,
-                    } as SwimmingPoolEntity);
-                }
+        // Обновление бассейнов
+        for (const poolDto of updateSaunaDto.swimmingPools) {
+            const pool = sauna.swimmingPools.find(p => p.swimmingPoolId === poolDto.swimmingPoolId);
+            if (pool) {
+                pool.width = poolDto.width;
+                pool.length = poolDto.length;
+            } else {
+                sauna.swimmingPools.push({
+                    width: poolDto.width,
+                    length: poolDto.length,
+                } as SwimmingPoolEntity);
             }
+        }
 
         await this.saunaRepository.save(sauna);
         return sauna;
     }
+
 
 
     async getSauna(saunaId: number) {

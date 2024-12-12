@@ -9,6 +9,7 @@
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .mainBlock {
@@ -19,13 +20,10 @@
 .cards {
     margin-top: calc(100vh + 100px);
     width: 100vw;
+    margin-bottom: 150px;
 }
 
-.filters {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 100px;
-}
+
 
 #secondaryText, #mainText {
     letter-spacing: 2px;
@@ -107,3 +105,43 @@
         left: -100vw;
     }
 }
+.filters {
+    width: 20vw;
+}
+
+.filterMenu {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    padding: 5px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 80vw;
+    height: 100vh;
+    vertical-align: center;
+}
+
+.resetButton {
+    display: block;
+    margin: 8px auto;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 16px;
+}
+
+
+.filterItem {
+    margin: 20px;
+}
+
+.applyButton {
+    margin-top: 16px;
+}
+
+.paginationBlock {
+    display: flex;
+    justify-content: center;
+    margin: 2% 0 0 15%;
+}
+

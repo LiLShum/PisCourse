@@ -18,6 +18,9 @@ import SaunaCard from "../saunaCards/saunaCard/saunaCard";
 import * as util from "util";
 import UserSaunaCard from "./userSaunasCard/userSaunaCard";
 import Sauna from "../../../../backend/course/src/entities/sauna.entity";
+import BookingDto from "../../models/dto/booking.dto";
+import ViewBookings from "./bookings/ViewBookings";
+import {UserBookingsDto} from "../../models/dto/booking.dto";
 const Profile : FC = () => {
     const [loginState, setLoginState] = useState<string>('');
     const [searchedUser, setSearchedUser] = useState<GrantUserModel>({} as GrantUserModel);
@@ -32,12 +35,11 @@ const Profile : FC = () => {
                         if(appendUserBlock) {
                             const appendItem = document.createElement('h1');
                             appendItem.innerText = `${user.data.name}: ${user.data.name} ${user.data.lastName}`;
-                            appendUserBlock.append(appendItem);
+                            appendUserBlock.replaceWith(appendItem);
                             setSearchedUser(user.data);
                         }
                     }
                     else {
-
                         const appendUserBlock = document.getElementById('searchWrapper');
                         if(appendUserBlock) {
                             const appendItem = document.createElement('h1');
@@ -58,24 +60,28 @@ const Profile : FC = () => {
     };
 
     const editClick = () => {
-            const userInputs = document.getElementsByTagName('input');
-            const saveButton = document.getElementById('saveButton');
-            const editButton = document.getElementById('editButton');
-            const passwordInput = document.getElementById('password-input');
-            const loginInput = document.getElementById('login-input');
+        const userInputs = document.getElementsByTagName('input');
+        const saveButton = document.getElementById('saveButton');
+        const editButton = document.getElementById('editButton');
+        const passwordInput = document.getElementById('password-input');
+        const loginInput = document.getElementById('login-input');
 
-            if (userInputs && saveButton && editButton && loginInput && passwordInput) {
-                for (let i = 0; i < userInputs.length; i++) {
-                    const element = userInputs[i] as HTMLInputElement;
-                    element.disabled = !element.disabled;
-                    editButton.innerText = editButton.innerText === 'Изменить' ? 'Отмена' : 'Изменить';
-                    saveButton.style.display = !element.disabled ? 'inline-block' : 'none'
-                    passwordInput.style.display = passwordInput.style.display === 'none' ? 'block' : 'none';
-                    loginInput.style.display = loginInput.style.display === 'none' ? 'block' : 'none';
-                    element.value = '';
+        if (userInputs && saveButton && editButton && loginInput && passwordInput) {
+            const isEditing = editButton.innerText.trim().toLowerCase() === 'изменить';
+
+            for (let i = 0; i < userInputs.length; i++) {
+                const element = userInputs[i] as HTMLInputElement;
+                element.disabled = !isEditing;
+                if (!isEditing) element.value = '';
             }
+
+            editButton.innerText = isEditing ? 'Отмена' : 'Изменить';
+            saveButton.style.display = isEditing ? 'inline-block' : 'none';
+            passwordInput.style.display = isEditing ? 'block' : 'none';
+            loginInput.style.display = isEditing ? 'block' : 'none';
         }
     };
+
 
     const editProfile = () => {
         const nameInput: HTMLInputElement = document.getElementById('name-input') as HTMLInputElement;
@@ -112,9 +118,6 @@ const Profile : FC = () => {
                 if(Array.isArray(sauna.data)) {
                     setSaunas(sauna.data);
                 }
-                else {
-
-                }
             })
             .catch(() => {
                 alert('User with such id has no saunas');
@@ -130,7 +133,6 @@ const Profile : FC = () => {
                 console.error(error.message);
             });
     }, [store]);
-
     return(
       <div className={styles.wrapper}>
           <h1>Профиль</h1>
@@ -149,7 +151,7 @@ const Profile : FC = () => {
                   <input id='login-input' disabled={true} className={styles.userInfoInput} style={{display: 'none'}}
                          placeholder={`Логин: ${store.user.login}`}/>
                   <div style={{display: 'flex', gap: '20px', justifyContent: "center"}}>
-                      <button id='editButton' className={styles.editButton} color="primary" onClick={() => editClick()}>
+                      <button id='editButton' className={styles.editButton} color="primary" onClick={editClick}>
                           Изменить
                       </button>
                       <button id='saveButton' style={{display: "none"}} className={styles.editButton} color="primary"
@@ -163,7 +165,6 @@ const Profile : FC = () => {
                       <h1>Ваши сауны:</h1>
                       <div className={styles.userSaunas}>
                           {saunas.map((sauna) => {
-                              console.log(sauna)
                               return <UserSaunaCard saunaId={sauna.saunaId}
                                                     name={sauna.name}
                                                     price={sauna.price}
@@ -206,7 +207,6 @@ const Profile : FC = () => {
                       <div>
                           <Button onClick={() => setCreateSaunaPanel(!createSaunaPanel)}>Добавить сауну</Button>
                       </div>
-
                   }
               </div>
           }

@@ -1,11 +1,11 @@
 import $api from "../http";
 import AddCommentDto from "../models/dto/add-comment.dto";
 import {AxiosResponse} from "axios";
-import CommentDto from "../models/dto/comment.dto";
+import CommentDto, {FetchCommentsDto} from "../models/dto/comment.dto";
 
 export default class CommentService {
-    static async fetchComments(saunaId: string) : Promise<AxiosResponse<CommentDto[]>> {
-        return $api.get(`http://localhost:4000/comments/${saunaId}`);
+    static async fetchComments(saunaId: string, limit: number, offset: number) : Promise<AxiosResponse<FetchCommentsDto>> {
+        return $api.get(`http://localhost:4000/comments/${saunaId}/${limit}/${offset}`);
     }
 
     static async addComment(commentDto: AddCommentDto) {

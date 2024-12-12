@@ -18,7 +18,7 @@ export default class Addresses {
     @Column()
     houseNumber: string;
 
-    @OneToOne(()=> Sauna, (sauna) => sauna.address,{ onDelete: 'CASCADE', cascade: true } )
+    @OneToOne(()=> Sauna, (sauna) => sauna.address,{ onDelete: 'CASCADE'} )
     @JoinColumn()
     sauna: Sauna;
 

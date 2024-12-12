@@ -1,0 +1,57 @@
+.filters {
+    background-color: #f9f9f9; /* Светлый фон */
+    border: 1px solid #ddd; /* Легкая рамка */
+    border-radius: 10px; /* Скругленные углы */
+    padding: 20px; /* Внутренний отступ */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень для объема */
+    max-width: 300px; /* Максимальная ширина */
+    margin-right: 20px; /* Отступ справа */
+}
+
+/* Стили для каждой секции фильтра */
+.filterMenu {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Пространство между элементами */
+}
+
+/* Стили для каждого фильтра */
+.filterItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.filterItem label {
+    font-size: 14px; /* Размер текста */
+    font-weight: bold; /* Жирный шрифт */
+    margin-bottom: 5px; /* Отступ под заголовком */
+    color: #333; /* Цвет текста */
+}
+
+.filterItem input,
+.filterItem select {
+    border: 1px solid #ccc; /* Рамка */
+    border-radius: 5px; /* Скругленные углы */
+    padding: 10px; /* Внутренний отступ */
+    font-size: 14px; /* Размер текста */
+    transition: border-color 0.3s ease; /* Анимация при фокусе */
+}
+
+.filterItem input:focus,
+.filterItem select:focus {
+    border-color: #4CAF50; /* Цвет рамки при фокусе */
+    outline: none; /* Убираем стандартную обводку */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Легкая подсветка */
+}
+
+/* Стили для чекбокса */
+.filterItem .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Пространство между чекбоксом и текстом */
+}
+
+/* Стили кнопки сортировки */
+.filterItem select {
+    cursor: pointer; /* Курсор "рука" */
+}

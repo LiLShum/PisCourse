@@ -40,7 +40,7 @@ export default class CommentService {
         return createdComment;
     }
 
-    async fetchComments(saunaId: number) {
+    async fetchComments(saunaId: number, limit: number, offset: number) {
         const comments = await this.commentsRepository.find({
             relations: {
                 user: true,
@@ -49,8 +49,18 @@ export default class CommentService {
                 sauna: {
                     saunaId: saunaId
                 }
-            }
+            },
+            take: limit,
+            skip: offset
         });
+
+        const commentLength = (await this.commentsRepository.find({
+            where: {
+                sauna: {
+                    saunaId: saunaId
+                }
+            },
+        })).length;
 
         const commentsWithLogins: CommentDto[] = await Promise.all(
             comments.map(async (comment) => {
@@ -68,7 +78,7 @@ export default class CommentService {
             })
         );
 
-        return commentsWithLogins;
+        return {comments: commentsWithLogins, length: commentLength};
     }
 
 

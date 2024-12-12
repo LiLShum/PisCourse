@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from './Booking.module.css';
 import { Context } from "../../../index";
-import {Navigate, useParams} from "react-router-dom";
+import {Navigate, useNavigate, useParams} from "react-router-dom";
 
 type Booking = {
     date: Date | null;
@@ -25,24 +25,20 @@ const BookingComponent: React.FC = () => {
         startTime: null,
         endTime: null,
     });
-
+    const navigate = useNavigate();
     const [blockedTimes, setBlockedTimes] = useState<BlockedTimes>({});
 
     useEffect( () => {
         store.getBookings().then((response) => {
-            console.log(response.data);
             const data = response.data.map((booking: any) => ({
                 date: new Date(booking.date),
                 startTime: new Date(booking.startTime),
                 endTime: new Date(booking.endTime),
             }));
-            console.log(data);
             store.getUserByLogin(store.user.login)
                 .then((data) => setUserId(+data.data.userId));
             setBookings(data);
-            console.log(bookings)
             initializeBlockedTimes(data);
-            console.log(blockedTimes);
         });
     }, [store]);
 
@@ -92,6 +88,11 @@ const BookingComponent: React.FC = () => {
                     return;
                 }
 
+                if(startTime > endTime) {
+                    alert("Неккортные времменой интервал!")
+                    return;
+                }
+
                 const newBooking: Booking = {
                     date: currentBooking.date,
                     startTime,
@@ -113,6 +114,9 @@ const BookingComponent: React.FC = () => {
 
                 setCurrentBooking({ date: null, startTime: null, endTime: null });
             }
+        }
+        else {
+            navigate('/auth');
         }
     };
 

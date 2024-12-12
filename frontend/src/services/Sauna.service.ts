@@ -15,7 +15,7 @@ export default class SaunaService {
     }
 
     static async fetchSaunas() : Promise<AxiosResponse<SaunaDto[]>> {
-        return await $api.get('http://localhost:4000/sauna', {
+        return await $api.get(`http://localhost:4000/sauna`, {
             headers: {
                 Authorization: "Bearer: " + window.localStorage.getItem("token")
             }

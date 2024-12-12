@@ -27,9 +27,6 @@ interface UpdateSaunaPanelProps {
 
 const UpdateSaunaPanel : FC<UpdateSaunaPanelProps> = ({isOpen, onOpen, onOpenChange, sauna}) => {
     const { store } = useContext(Context);
-
-
-
     const updateSauna = function (updateSaunaDto : UpdateSaunaDto) {
         return store.updateSauna(updateSaunaDto, sauna.saunaId.toString());
     }
@@ -40,7 +37,7 @@ const UpdateSaunaPanel : FC<UpdateSaunaPanelProps> = ({isOpen, onOpen, onOpenCha
     //input states
     const [name, setName] = useState<string>(sauna.name);
     const [description, setDescription] = useState<string>(sauna.description);
-    const [image, setImage] = useState<string>(sauna.images[0].url);
+    const [image, setImage] = useState<string>("");
     const [loadImage, setLoadImage] = useState<File>();
     const [region, setRegion] = useState<string>(sauna.address.region);
     const [city, setCity] = useState<string>(sauna.address.city);
@@ -55,6 +52,14 @@ const UpdateSaunaPanel : FC<UpdateSaunaPanelProps> = ({isOpen, onOpen, onOpenCha
     }));
     const [billiard, setBilliard] = useState<number | undefined>(sauna.billiard);
     const [price, setPrice] = useState<number>(sauna.price);
+
+    useEffect(() => {
+        console.log("Current sauna.images:", sauna.images);
+        if (sauna.images && sauna.images.length > 0) {
+            setImage(`/${sauna.images[0].url}`);
+        }
+    }, [sauna]);
+
     return (
         <>
             <Modal isOpen={isOpen}
@@ -87,23 +92,6 @@ const UpdateSaunaPanel : FC<UpdateSaunaPanelProps> = ({isOpen, onOpen, onOpenCha
                                                    placeholder="Введите описание"
                                                    label="Введите описание"
                                                    onChange={(e) => setDescription(e.target.value)}
-                                            />
-                                        </div>
-                                        <div key={"underlined"}
-                                             className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4"
-                                        >
-
-                                            <Input type="file" variant={"underlined"}
-                                                   placeholder="Добавьте изображение:"
-                                                   label="Добавьте изображение:"
-                                                   id={'file'}
-                                                   onChange={(event) => {
-                                                       const file = event.target.files?.[0];
-                                                       if (file) {
-                                                           setImage(`${store.user.login}-${file.name}`);
-                                                           setLoadImage(file);
-                                                       }
-                                                   }}
                                             />
                                         </div>
                                         <div key={"underlined"}
@@ -237,7 +225,10 @@ const UpdateSaunaPanel : FC<UpdateSaunaPanelProps> = ({isOpen, onOpen, onOpenCha
                                             swimmingPools: swimmingPools,
                                         }
                                         updateSauna(updateData)
-                                            .then(()=> alert("updated"))
+                                            .then(()=> {
+                                                alert("updated")
+                                                onClose();
+                                            })
                                             .catch((reason) => alert(reason));
                                     }}>
                                         Обновить

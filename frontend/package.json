@@ -58,7 +58,9 @@
     ]
   },
   "devDependencies": {
+    "@pbe/react-yandex-maps": "^1.2.5",
     "@types/leaflet": "^1.9.14",
+    "@yandex/ymaps3-types": "^0.0.27",
     "assert": "^2.1.0",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.1",

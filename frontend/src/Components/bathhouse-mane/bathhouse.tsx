@@ -1,7 +1,7 @@
 import styles from './bathhouse.module.css';
 import SaunaCards from "../saunaCards/saunaCards";
-import FilterMenu from "../filters/Filters";
-import {useState} from "react";
+import React, {useState} from "react";
+import {Checkbox, Input, Pagination, Select, SelectItem} from "@nextui-org/react";
 
 const mainbathesParams = [
     { mainText: "Бани и  сауны в Минске", secodaryText: 'Финские, русские, хамам парилки!', image: 'back2.jpg' },
@@ -10,10 +10,6 @@ const mainbathesParams = [
 ];
 
 export default function BathhouseMain() {
-    const [filters, setFilters] = useState<any>({});
-    const handleFilterChange = (newFilters: any) => {
-        setFilters(newFilters);
-    };
     return (
         <div className={styles.wrapper}>
             <div className={styles.mainBlock}>
@@ -34,11 +30,10 @@ export default function BathhouseMain() {
                 </div>
             </div>
             <div className={styles.cards}>
-                <div className={styles.filters}>
-                    <FilterMenu/>
-                </div>
+                <h1 style={{textAlign: "center", marginBottom: 40}}>Бани и сауны</h1>
                 <SaunaCards/>
             </div>
+
         </div>
     );
 }

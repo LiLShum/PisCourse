@@ -8,14 +8,16 @@ import { Context } from "../../../index";
 import User from "../../../../../backend/course/src/entities/user.entity";
 import ImageEntity from "../../../../../backend/course/src/entities/image.entity";
 import $api from "../../../http";
+import {useNavigate} from "react-router-dom";
 
 const CreateSaunaPanel: FC = () => {
     const { store } = useContext(Context);
-
+    const naviagtor = useNavigate();
     const [swimmingPoolState, setSwimmingPoolState] = useState<string>("no");
     const [billiardState, setBilliardState] = useState<string>("no");
 
     // Input states
+    const [priceInput, setPriceInput] = useState("");
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [image, setImage] = useState<ImageEntity[]>([]);
@@ -42,7 +44,48 @@ const CreateSaunaPanel: FC = () => {
         setSwimmingPools(swimmingPools.filter((_, i) => i !== index));
     };
 
+    const validateInputs = (): boolean => {
+        if (!name.trim()) {
+            alert("Название обязательно.");
+            return false;
+        }
+        if (!description.trim()) {
+            alert("Описание обязательно.");
+            return false;
+        }
+
+        if(loadImage.length === 0) {
+            alert('Изображение обязательно!')
+            return false;
+        }
+
+        if (!region.trim()) {
+            alert("Область обязательна.");
+            return false;
+        }
+        if (!city.trim()) {
+            alert("Город обязателен.");
+            return false;
+        }
+        if (!street.trim()) {
+            alert("Улица обязательна.");
+            return false;
+        }
+        if (!houseNumber.trim()) {
+            alert("Номер дома обязателен.");
+            return false;
+        }
+        if (price <= 0) {
+            alert("Цена должна быть больше 0.");
+            return false;
+        }
+        
+        return true;
+    };
+
     const addSauna = async () => {
+        if (!validateInputs()) return;
+
         try {
             const formData = new FormData();
 
@@ -62,10 +105,8 @@ const CreateSaunaPanel: FC = () => {
             };
             formData.append("addSaunaDto", JSON.stringify(sauna));
 
-            // Добавление данных пользователя в FormData
             formData.append("user", JSON.stringify(store.user));
 
-            // Отправка объединенного запроса
             const response = await $api.post(
                 "http://localhost:4000/sauna/addSaunaWithImages",
                 formData,
@@ -114,9 +155,8 @@ const CreateSaunaPanel: FC = () => {
                                 return {
                                     id: 0,
                                     url: `${store.user.login}-${file.name}`,
-                                }
+                                };
                             });
-
 
                             setLoadImage(uploadedFiles);
                         }
@@ -125,10 +165,19 @@ const CreateSaunaPanel: FC = () => {
             </div>
             <div className="flex w-full gap-4">
                 <Input
+                    id='priceInput'
                     type="text"
                     variant="underlined"
                     placeholder="Цена за час"
-                    onChange={(e) => setPrice(+e.target.value)}
+                    value={priceInput}
+                    onChange={(e) => {
+                        const value = e.target.value;
+                        if (/^\d*\.?\d*$/.test(value)) {
+                            setPriceInput(value);
+                            setPrice(+value || 0);
+                        }
+                    }
+                    }
                 />
             </div>
             <div className="flex w-full gap-4">
@@ -217,7 +266,7 @@ const CreateSaunaPanel: FC = () => {
                 </div>
             )}
             <ButtonGroup>
-                <Button onClick={() => window.location.reload()}>Отменить</Button>
+                <Button onClick={() =>  naviagtor('/profile')}>Отменить</Button>
                 <Button type="submit" onClick={addSauna}>
                     Добавить
                 </Button>
