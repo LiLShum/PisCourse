@@ -9,7 +9,6 @@ import {AuthService} from "./auth/auth.service";
 import {AuthModule} from "./auth/auth.module";
 import {JwtModule} from "@nestjs/jwt";
 import Sauna from "./entities/sauna.entity";
-import Mark from "./entities/marks.entity";
 import Comments from "./entities/comments.entity";
 import Addresses from "./entities/addresses.entity";
 import Booking from "./entities/booking.entity";
@@ -28,16 +27,16 @@ import CommentModule from "./comments/comment.module";
   imports: [
       TypeOrmModule.forRoot({
         type: 'postgres',
-        host: 'localhost', //db
+        host: 'db', //db
         port: 5432,
         username: 'postgres',
         password: 'LOL123321lol',
         database: 'postgres',
-        entities: [User, Sauna, Mark, Comments, Addresses, Booking, TokenEntity, SwimmingPoolEntity, ImageEntity],
+        entities: [User, Sauna, Comments, Addresses, Booking, TokenEntity, SwimmingPoolEntity, ImageEntity],
         synchronize: true,
       }),
       TypeOrmModule.forFeature([
-          User, Sauna, Mark, Comments, Addresses, Booking, TokenEntity, SwimmingPoolEntity, ImageEntity
+          User, Sauna, Comments, Addresses, Booking, TokenEntity, SwimmingPoolEntity, ImageEntity
       ]),
       UserModule,
       AuthModule,

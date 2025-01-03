@@ -1,9 +1,7 @@
 import {Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne, JoinColumn} from 'typeorm';
 import Sauna from "./sauna.entity";
-import Mark from "./marks.entity";
 import Comments from "./comments.entity";
 import Booking from "./booking.entity";
-import Addresses from "./addresses.entity";
 
 @Entity()
 export default class User {
@@ -33,9 +31,6 @@ export default class User {
 
     @OneToMany(()=> Sauna, (sauna) => sauna.user)
     saunas: Sauna[]
-
-    @OneToMany(() => Mark, mark => mark.user)
-    marks: Mark[]
 
     @OneToMany(() => Comments, comment => comment.user)
     comments: Comments[];

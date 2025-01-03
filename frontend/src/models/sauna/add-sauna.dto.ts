@@ -1,5 +1,6 @@
-import User from '../../../../backend/course/src/entities/user.entity'
-import ImageEntity from "../../../../backend/course/src/entities/image.entity";
+import ImageDto from "../Image.dto";
+import {IUser} from "../User";
+
 export interface SaunaDto {
     saunaId: number;
 
@@ -13,7 +14,7 @@ export interface SaunaDto {
 
     description: string;
 
-    images: ImageEntity[];
+    images: ImageDto[];
 
     address: AddressDto;
 
@@ -32,7 +33,7 @@ export interface userSaunaCardProps {
 
     description: string;
 
-    images: ImageEntity[];
+    images: ImageDto[];
 
     address: AddressDto;
 }
@@ -62,7 +63,7 @@ export class AddSaunaDto {
     city: string;
     street: string;
     houseNumber: string;
-    User: User;
+    User: IUser;
     swimmingPool?: SwimmingPool[];
 }
 

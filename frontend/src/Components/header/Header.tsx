@@ -40,9 +40,8 @@ const Header: FC<HeaderProps> = ({ isAuth }) => {
 
 
     const { store } = useContext(Context);
-    const [searchText, setSearchText] = useState<string>(""); // Состояние для текста поиска
-    const [filteredSaunas, setFilteredSaunas] = useState<SaunaDto[]>([]); // Фильтрованные сауны
-
+    const [searchText, setSearchText] = useState<string>("");
+    const [filteredSaunas, setFilteredSaunas] = useState<SaunaDto[]>([]);
     useEffect(() => {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
@@ -56,7 +55,6 @@ const Header: FC<HeaderProps> = ({ isAuth }) => {
 
         store.fetchSaunas()
             .then((response) => {
-                console.log(response);
                 const saunas: SaunaDto[] = response.data;
                 const filtered = saunas.filter(sauna =>
                     sauna.name.toLowerCase().includes(searchText.toLowerCase())
@@ -81,9 +79,6 @@ const Header: FC<HeaderProps> = ({ isAuth }) => {
                         navigate('/auth')
                     }
                 }}>Мои заказы</a>
-                <a className={styles.links}>БАННОЕ МЕНЮ</a>
-                <a className={styles.links}>ОТЗЫВЫ</a>
-                <a className={styles.links}>КОНТАКТЫ</a>
                 {!isAuth && (
                     <a className={styles.links} onClick={() => navigate('/auth')} >
                         Войти

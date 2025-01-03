@@ -1,26 +1,15 @@
 import React, {FC, useContext, useEffect, useState} from "react";
-import {Select, SelectItem, useDisclosure, Input} from "@nextui-org/react";
 import styles from "./profile.module.css"
 import {Context} from "../../index";
 import {Button, ButtonGroup} from "@nextui-org/button";
-import {isArray, log} from "node:util";
 import EditUserDto from "../../models/dto/edit-user.dto";
-import {user} from "@nextui-org/react";
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 import {IUser} from "../../models/User";
 import {AxiosResponse} from "axios";
 import GrantUserModel from "../../models/GrantUserModel";
-import GrantUserDto from "../../models/dto/grant-user.dto";
 import CreateSaunaPanel from "./createSaunapanel/createSaunaPanel";
 import {SaunaDto} from "../../models/sauna/add-sauna.dto";
-import SaunaCard from "../saunaCards/saunaCard/saunaCard";
-import * as util from "util";
 import UserSaunaCard from "./userSaunasCard/userSaunaCard";
-import Sauna from "../../../../backend/course/src/entities/sauna.entity";
-import BookingDto from "../../models/dto/booking.dto";
-import ViewBookings from "./bookings/ViewBookings";
-import {UserBookingsDto} from "../../models/dto/booking.dto";
+
 const Profile : FC = () => {
     const [loginState, setLoginState] = useState<string>('');
     const [searchedUser, setSearchedUser] = useState<GrantUserModel>({} as GrantUserModel);
@@ -59,6 +48,10 @@ const Profile : FC = () => {
         }
     };
 
+    const handleAddSauna = (newSauna: SaunaDto) => {
+        setSaunas((prevSaunas) => [...prevSaunas, newSauna]);
+        setCreateSaunaPanel(false);
+    };
     const editClick = () => {
         const userInputs = document.getElementsByTagName('input');
         const saveButton = document.getElementById('saveButton');
@@ -133,6 +126,7 @@ const Profile : FC = () => {
                 console.error(error.message);
             });
     }, [store]);
+
     return(
       <div className={styles.wrapper}>
           <h1>Профиль</h1>
@@ -173,6 +167,11 @@ const Profile : FC = () => {
                                                     images={sauna.images}
                                                     swimmingPools={sauna.swimmingPools}
                                                     billiard={sauna.billiard}
+                                                    onDelete={(id) => {
+                                                        setSaunas((prevSaunas) =>
+                                                            prevSaunas.filter((sauna) => sauna.saunaId !== id)
+                                                        );
+                                                    }}
                               />
                           })}
                       </div>

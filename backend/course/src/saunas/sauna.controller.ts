@@ -47,9 +47,11 @@ export default class SaunaController{
         const uploadedImages = await Promise.all(
             files.map(async (file) => {
                 const fileName = `${parsedUser.login}-${file.originalname}`;
-                const filePath = path.join('../../frontend/public', fileName);
-                await fs.promises.writeFile(filePath, file.buffer);
+                const directory = path.resolve('/app/frontend/public');
+                await fs.promises.mkdir(directory, { recursive: true });
 
+                const filePath = path.join(directory, fileName);
+                await fs.promises.writeFile(filePath, file.buffer);
                 return  this.imageRepository.create({
                     url: fileName,
                 });
@@ -59,7 +61,6 @@ export default class SaunaController{
 
         parsedAddSaunaDto.image = uploadedImages;
 
-        console.log(parsedAddSaunaDto);
 
         await this.saunaService.addSauna(parsedAddSaunaDto);
 
@@ -95,7 +96,6 @@ export default class SaunaController{
 
     @Get(':saunaId')
     getSauna(@Param('saunaId') saunaId: string) {
-        console.log(saunaId);
         return this.saunaService.getSauna(+saunaId);
     }
 }

@@ -6,17 +6,12 @@ import {
     ModalBody,
     ModalFooter,
     Button,
-    useDisclosure,
     Input
 } from "@nextui-org/react";
-import {SaunaDto, SwimmingPool} from "../../../models/sauna/add-sauna.dto";
+import {SaunaDto} from "../../../models/sauna/add-sauna.dto";
 import {Context} from "../../../index";
-import {ButtonGroup} from "@nextui-org/button";
 import UpdateSaunaDto from "../../../models/sauna/update-sauna.dto";
-import Sauna from "../../../../../backend/course/src/entities/sauna.entity";
-import userSaunaCardProps from "../userSaunasCard/dto/UserSaunaCard.props";
-import SwimmingPoolEntity from "../../../../../backend/course/src/entities/SwimmingPool.entity";
-
+import SwimmingPoolDto from "../../../models/SwimmingPool.dto";
 
 interface UpdateSaunaPanelProps {
     isOpen: boolean;
@@ -43,7 +38,7 @@ const UpdateSaunaPanel : FC<UpdateSaunaPanelProps> = ({isOpen, onOpen, onOpenCha
     const [city, setCity] = useState<string>(sauna.address.city);
     const [street, setStreet] = useState<string>(sauna.address.street);
     const [houseNumber, setHouseNumber] = useState<string>(sauna.address.houseNumber);
-    const [swimmingPools, setSwimmingPools] = useState<SwimmingPoolEntity[]>(sauna.swimmingPools as SwimmingPoolEntity[]);
+    const [swimmingPools, setSwimmingPools] = useState<SwimmingPoolDto[]>(sauna.swimmingPools as SwimmingPoolDto[]);
     const [width, setWidth] = useState<number[]>(swimmingPools.map((swimmingPool) => {
         return swimmingPool.width;
     }));

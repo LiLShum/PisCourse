@@ -1,6 +1,5 @@
 import {SwimmingPool} from "../../../../models/sauna/add-sauna.dto";
-import User from '../../../../../../backend/course/src/entities/user.entity'
-
+import {IUser} from "../../../../models/User";
 export default interface saunaCardProps {
     name: string;
 
@@ -23,7 +22,7 @@ export interface saunaInfoProps {
 
     Addresses: AddressDto;
 
-    User: User;
+    User: IUser;
 }
 
 export interface AddressDto {

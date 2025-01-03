@@ -17,13 +17,8 @@ export class AuthService {
     ) {}
 
     async signIn(authData : AuthDto, @Res() res) {
-        console.log("authdate: ");
-        console.log(authData);
         const user: User = await this.userService.getUserByLogin(authData.login);
-        console.log("user: " + user);
         const inputPassword = sha256(authData.password);
-        console.log(inputPassword);
-        console.log(user.password)
         if(user.password !== inputPassword) {
             throw new UnauthorizedException();
         }
@@ -37,9 +32,7 @@ export class AuthService {
     }
 
     async register(createUserDto : CreateUserDTO, @Res() res) {
-        console.log("pass before hash: " + createUserDto.password)
         createUserDto.password =  sha256(String(createUserDto.password));
-        console.log("pass after hash: " + createUserDto.password)
         const createdUser =  await this.userService.createUser(createUserDto);
         const payload = { userId: createdUser.userId, login: createdUser.login, role: createdUser.role };
         const tokens =  this.tokenService.generateTokens(payload);

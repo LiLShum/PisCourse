@@ -1,4 +1,4 @@
-import SwimmingPool from "../../../../backend/course/src/entities/SwimmingPool.entity";
+import SwimmingPoolDto from "../SwimmingPool.dto";
 
 export default interface UpdateSaunaDto {
     region: string;
@@ -13,7 +13,7 @@ export default interface UpdateSaunaDto {
 
     name: string;
 
-    swimmingPools?: SwimmingPool[];
+    swimmingPools?: SwimmingPoolDto[];
 
     billiard?: number;
 

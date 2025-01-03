@@ -8,7 +8,6 @@ export default class CommentController {
     }
     @Post()
     async addComment(@Body() commentDto: AddCommentDto) {
-        console.log('hello');
         return this.commentService.addComment(commentDto);
     }
 
@@ -19,7 +18,6 @@ export default class CommentController {
 
     @Delete('/:saunaId')
     async deleteComment(@Param('saunaId') saunaId: string) {
-        console.log(saunaId);
         return this.commentService.deleteComment(+saunaId);
     }
 }

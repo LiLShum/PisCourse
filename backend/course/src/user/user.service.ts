@@ -43,7 +43,7 @@ export class UserService {
         const userData: User = await this.tokenService.validateRefreshToken(refreshToken);
         const tokenFromDB: TokenEntity = await this.tokenService.findToken(refreshToken);
 
-        if (!userData || !tokenFromDB) {
+        if (!userData || !tokenFromDB) {``
             throw new Error("Unauthorized error");
         }
 

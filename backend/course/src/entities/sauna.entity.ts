@@ -1,6 +1,5 @@
 import {Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn} from "typeorm";
 import User from "./user.entity";
-import Mark from "./marks.entity";
 import Comments from "./comments.entity";
 import Booking from "./booking.entity";
 import Addresses from "./addresses.entity";
@@ -30,9 +29,6 @@ export default class Sauna {
 
     @ManyToOne(()=> User, (user) => user.saunas,)
     user: User;
-
-    @OneToMany(() => Mark, mark => mark.sauna, { onDelete: 'CASCADE' })
-    marks: Mark[];
 
     @OneToMany(() => Comments, comment => comment.sauna, { onDelete: 'CASCADE' })
     comments: Comments[];

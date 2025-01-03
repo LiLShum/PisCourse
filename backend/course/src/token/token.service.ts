@@ -20,7 +20,6 @@ export class TokenService {
 
     async saveToken(userId, refreshToken) {
         const tokenData = await this.tokenSchema.findOne({where: {UserId: userId}});
-        console.log(tokenData)
         if(tokenData) {
             tokenData.refreshToken = refreshToken;
             return await this.tokenSchema.save(tokenData);

@@ -25,14 +25,13 @@ export class UserController {
     }
 
     @Get('/getUserByLogin/:login')
-    getUserByLogin(@Param('login') login: string): Promise<User> {
+        getUserByLogin(@Param('login') login: string): Promise<User> {
         return this.userService.getUserByLogin(login);
     }
 
     @Put()
     editUserInfo(@Body() editUserDto: EditUserDto, @Req() req) {
         const token = req.headers['authorization'].split(' ')[1];
-        console.log(token);
         return this.userService.editUserInfo(editUserDto, token);
     }
 

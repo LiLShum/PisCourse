@@ -36,7 +36,6 @@ export default class CommentService {
 
         const createdComment =  this.commentsRepository.create(comment);
         await this.commentsRepository.save(createdComment);
-        console.log(createdComment);
         return createdComment;
     }
 

@@ -17,7 +17,6 @@ export default class SaunaService {
                 @InjectRepository(SwimmingPoolEntity) private readonly swimmingPoolRepository: Repository<SwimmingPoolEntity>) {
     }
     async addSauna(addSaunaDto: AddSaunaDto) {
-        console.log(addSaunaDto);
 
         await this.saunaRepository.manager.transaction(async (transactionalEntityManager) => {
             const addressRepository = transactionalEntityManager.getRepository(Addresses);
@@ -46,8 +45,6 @@ export default class SaunaService {
                     })
                 );
             }
-            console.log("sw-pools\n");
-            console.log(createdSwimmingPools);
             const sauna = this.saunaRepository.create({
                 name: addSaunaDto.name,
                 price: addSaunaDto.price,
@@ -58,7 +55,6 @@ export default class SaunaService {
                 swimmingPools: createdSwimmingPools ? createdSwimmingPools: null,
                 bookings: [],
                 comments: [],
-                marks: []
             });
 
             const createdSauna = await transactionalEntityManager.save(sauna);
@@ -75,7 +71,6 @@ export default class SaunaService {
             createdAddress.sauna = createdSauna;
             await addressRepository.save(createdAddress);
 
-            console.log('Created Sauna:', createdSauna);
         });
     }
 
@@ -123,7 +118,6 @@ export default class SaunaService {
         sauna.price = updateSaunaDto.price;
         sauna.billiard = updateSaunaDto.billiard;
 
-        // Обновление адреса
         if (sauna.address) {
             sauna.address.region = updateSaunaDto.region;
             sauna.address.city = updateSaunaDto.city;
@@ -138,7 +132,6 @@ export default class SaunaService {
             } as Addresses;
         }
 
-        // Обновление бассейнов
         for (const poolDto of updateSaunaDto.swimmingPools) {
             const pool = sauna.swimmingPools.find(p => p.swimmingPoolId === poolDto.swimmingPoolId);
             if (pool) {

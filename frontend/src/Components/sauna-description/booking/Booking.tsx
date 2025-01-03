@@ -42,6 +42,26 @@ const BookingComponent: React.FC = () => {
         });
     }, [store]);
 
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            fetchUpdatedBookings();
+        }, 1000); // Каждые 5 секунд
+
+        return () => clearInterval(interval); // Очистка интервала при размонтировании компонента
+    }, []);
+
+    const fetchUpdatedBookings = async () => {
+        const response = await store.getBookings();
+        const updatedBookings = response.data.map((booking: any) => ({
+            date: new Date(booking.date),
+            startTime: new Date(booking.startTime),
+            endTime: new Date(booking.endTime),
+        }));
+        setBookings(updatedBookings);
+        initializeBlockedTimes(updatedBookings);
+    };
+
     const initializeBlockedTimes = (bookings: Booking[]) => {
         const newBlockedTimes: BlockedTimes = {};
         bookings.forEach((booking) => {
@@ -77,48 +97,58 @@ const BookingComponent: React.FC = () => {
         );
     };
 
-    const blockTime = () => {
-        if(store.isAuth) {
-            if (currentBooking.date && currentBooking.startTime && currentBooking.endTime) {
-                const dateKey = currentBooking.date.toDateString();
-                const startTime = new Date(currentBooking.startTime);
-                const endTime = new Date(currentBooking.endTime);
-                if (isTimeBlocked(dateKey, startTime, endTime)) {
-                    alert("Выбранный интервал уже заблокирован!");
-                    return;
-                }
-
-                if(startTime > endTime) {
-                    alert("Неккортные времменой интервал!")
-                    return;
-                }
-
-                const newBooking: Booking = {
-                    date: currentBooking.date,
-                    startTime,
-                    endTime,
-                };
-                store.bookingSauna({
-                    date: newBooking.date as Date,
-                    startTime: newBooking.startTime as Date,
-                    endTime: newBooking.endTime as Date,
-                    saunaId: parseInt(saunaId as string),
-                    userId: userId,
-                });
-
-                setBookings((prev) => [...prev, newBooking]);
-                setBlockedTimes((prev) => ({
-                    ...prev,
-                    [dateKey]: [...(prev[dateKey] || []), { start: startTime, end: endTime }],
-                }));
-
-                setCurrentBooking({ date: null, startTime: null, endTime: null });
-            }
-        }
-        else {
+    const blockTime = async () => {
+        if (!store.isAuth) {
             navigate('/auth');
+            return;
+        }
+
+        if (currentBooking.date && currentBooking.startTime && currentBooking.endTime) {
+            const dateKey = currentBooking.date.toDateString();
+            const startTime = new Date(currentBooking.startTime);
+            const endTime = new Date(currentBooking.endTime);
+
+            // Запрашиваем актуальные данные
+            await fetchUpdatedBookings();
+
+            // Проверка, не заблокировано ли время
+            if (isTimeBlocked(dateKey, startTime, endTime)) {
+                alert("Выбранный временной интервал уже занят! Перезагрузите страницу.");
+                return;
+            }
+
+            if (startTime >= endTime) {
+                alert("Некорректный временной интервал!");
+                return;
+            }
+
+            const newBooking: Booking = {
+                date: currentBooking.date,
+                startTime,
+                endTime,
+            };
+
+            // Отправляем данные на сервер для бронирования
+            await store.bookingSauna({
+                date: newBooking.date as Date,
+                startTime: newBooking.startTime as Date,
+                endTime: newBooking.endTime as Date,
+                saunaId: parseInt(saunaId as string),
+                userId: userId,
+            });
+
+            // Обновляем локальные данные
+            setBookings((prev) => [...prev, newBooking]);
+            setBlockedTimes((prev) => ({
+                ...prev,
+                [dateKey]: [...(prev[dateKey] || []), { start: startTime, end: endTime }],
+            }));
+
+            setCurrentBooking({ date: null, startTime: null, endTime: null });
         }
     };
+
+
 
     const getExcludedTimes = () => {
         if (!currentBooking.date) return [];
@@ -129,13 +159,16 @@ const BookingComponent: React.FC = () => {
         intervals.forEach((interval) => {
             let currentTime = new Date(interval.start);
             while (currentTime < interval.end) {
-                excludedTimes.push(new Date(currentTime));
+                // Явно задаем локальное время
+                const excludedTime = new Date(currentTime);
+                excludedTimes.push(excludedTime);
                 currentTime.setMinutes(currentTime.getMinutes() + 30);
             }
         });
 
         return excludedTimes;
     };
+
 
     return (
         <div className={styles.bookingContainer}>

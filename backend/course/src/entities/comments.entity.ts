@@ -3,7 +3,7 @@ import User from "./user.entity";
 import Sauna from "./sauna.entity";
 
 @Entity()
-export default class Comments {
+    export default class Comments {
 
     @PrimaryGeneratedColumn()
     commentId: number;

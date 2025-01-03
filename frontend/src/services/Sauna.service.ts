@@ -3,7 +3,6 @@ import $api from "../http";
 import {AxiosResponse} from "axios";
 import {IUser} from "../models/User";
 import UpdateSaunaDto from "../models/sauna/update-sauna.dto";
-import ImageEntity from "../../../backend/course/src/entities/image.entity";
 
 export default class SaunaService {
     static async addSauna(addSaunaDto: AddSaunaDto) {

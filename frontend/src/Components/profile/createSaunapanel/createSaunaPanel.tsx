@@ -5,10 +5,10 @@ import { Avatar } from "@nextui-org/react";
 import styles from "./createSaunaPanel.module.css";
 import { AddSaunaDto, SwimmingPool } from "../../../models/sauna/add-sauna.dto";
 import { Context } from "../../../index";
-import User from "../../../../../backend/course/src/entities/user.entity";
-import ImageEntity from "../../../../../backend/course/src/entities/image.entity";
 import $api from "../../../http";
 import {useNavigate} from "react-router-dom";
+import ImageDto from "../../../models/Image.dto";
+import {IUser} from "../../../models/User";
 
 const CreateSaunaPanel: FC = () => {
     const { store } = useContext(Context);
@@ -20,7 +20,7 @@ const CreateSaunaPanel: FC = () => {
     const [priceInput, setPriceInput] = useState("");
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
-    const [image, setImage] = useState<ImageEntity[]>([]);
+    const [image, setImage] = useState<ImageDto[]>([]);
     const [loadImage, setLoadImage] = useState<File[]>([]);
     const [region, setRegion] = useState<string>("");
     const [city, setCity] = useState<string>("");
@@ -100,7 +100,7 @@ const CreateSaunaPanel: FC = () => {
                 city,
                 street,
                 houseNumber,
-                User: store.user as User,
+                User: store.user as IUser,
                 swimmingPool: swimmingPools.length > 0 ? swimmingPools : undefined,
             };
             formData.append("addSaunaDto", JSON.stringify(sauna));

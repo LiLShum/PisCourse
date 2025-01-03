@@ -15,8 +15,9 @@ import {SaunaDto, userSaunaCardProps} from "../../../models/sauna/add-sauna.dto"
 import {Context} from "../../../index";
 import UpdateSaunaPanel from "../updateSaunaPanel/UpdateSaunaPanel";
 import saunaCard from "../../saunaCards/saunaCard/saunaCard";
+import {useNavigate} from "react-router-dom";
 
-const UserSaunaCard: FC<userSaunaCardProps> = (userSaunaCardProps: userSaunaCardProps) => {
+const UserSaunaCard: FC<userSaunaCardProps & { onDelete: (id: number) => void }> = ({ onDelete, ...userSaunaCardProps }) => {
     const [selectedOption, setSelectedOption] = useState<keyof typeof labelsMap | ''>('');
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     const saunaImages = [...userSaunaCardProps.images];
@@ -27,7 +28,7 @@ const UserSaunaCard: FC<userSaunaCardProps> = (userSaunaCardProps: userSaunaCard
         update: "Обновить",
     };
 
-    console.log(saunaImages);
+
     return (
         <div className="max-w-[900px] gap-2 grid grid-cols-12 grid-rows-2 px-8" style={{width: "800px"}}>
             <Card isFooterBlurred className="w-full h-[300px] col-span-12 sm:col-span-7">
@@ -79,7 +80,10 @@ const UserSaunaCard: FC<userSaunaCardProps> = (userSaunaCardProps: userSaunaCard
                                 </DropdownItem>
                                 <DropdownItem key="delete" onClick={() => {
                                     store.deleteSauna(userSaunaCardProps.saunaId.toString())
-                                        .then(() => alert("deleted"))
+                                        .then(() => {
+                                            alert("deleted");
+                                            onDelete(userSaunaCardProps.saunaId);
+                                        })
                                         .catch(() => alert("error"))
                                 }}>
                                     {labelsMap["delete"]}

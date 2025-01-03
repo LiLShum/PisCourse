@@ -1,6 +1,4 @@
-import {Column, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import Sauna from "../../entities/sauna.entity";
-import Mark from "../../entities/marks.entity";
 import Comments from "../../entities/comments.entity";
 import Booking from "../../entities/booking.entity";
 
@@ -22,8 +20,6 @@ export default interface IUser {
     password: string;
 
     saunas: Sauna[]
-
-    marks: Mark[]
 
     comments: Comments[];
 

@@ -1,7 +1,7 @@
-import {Injectable} from "@nestjs/common";
+import {BadRequestException, Injectable} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
 import Booking from "../entities/booking.entity";
-import {Repository} from "typeorm";
+import {LessThan, MoreThan, Repository} from "typeorm";
 import Sauna from "../entities/sauna.entity";
 import User from "../entities/user.entity";
 import BookingDto from "./dto/Booking.dto";
@@ -14,28 +14,48 @@ export default class BookingService {
     }
 
     async bookingSauna(bookingDto: BookingDto) {
-        const sauna = await this.saunaRepository.findOne({
+        const { date, startTime, endTime, saunaId } = bookingDto;
+
+        const roundToMinutes = (date: Date) => {
+            const roundedDate = new Date(date);
+            roundedDate.setSeconds(0, 0);
+            return roundedDate;
+        };
+
+        const currentStartTime = roundToMinutes(new Date(startTime));
+        const currentEndTime = roundToMinutes(new Date(endTime));
+
+        const overlappingBooking = await this.bookingRepository.findOne({
             where: {
-            saunaId: bookingDto.saunaId,
-            }
+                sauna: { saunaId: saunaId },
+                date,
+                startTime: LessThan(currentEndTime),
+                endTime: MoreThan(currentStartTime),
+            },
+        });
+
+        if (overlappingBooking) {
+            throw new BadRequestException("Выбранный временной интервал уже занят.");
+        }
+
+        const sauna = await this.saunaRepository.findOne({
+            where: { saunaId: saunaId },
         });
 
         const user = await this.userRepository.findOne({
-            where: {
-                userId: bookingDto.userId,
-            }
+            where: { userId: bookingDto.userId },
         });
 
         const booking = new Booking();
-
         booking.sauna = sauna;
         booking.user = user;
-        booking.startTime = bookingDto.startTime;
-        booking.endTime = bookingDto.endTime;
-        booking.date = bookingDto.date;
+        booking.date = date;
+        booking.startTime = currentStartTime;
+        booking.endTime = currentEndTime;
 
         return await this.bookingRepository.manager.save<Booking>(booking);
     }
+
 
     async getBookings()  {
         return await this.bookingRepository.find();
